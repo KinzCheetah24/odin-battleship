@@ -12,7 +12,10 @@ class Gameboard {
         if(!(x0 < this._size && x1 < this._size && y0 < this._size && y1 < this._size)) {
             return -1;
         }
-        if(((x1 - x0 + 1) !== shipLength && (y1 - y0 + 1) !== shipLength) || ((x1 - x0 + 1) === shipLength && (y1 - y0 + 1) === shipLength)) {
+        if(((x1 - x0 + 1) !== shipLength && (y1 - y0 + 1) !== shipLength) || ((x1 - x0) !== 0 && (y1 - y0) !== 0)) {
+            return -1;
+        }
+        if(this._shipPlaced(x0, x1, y0, y1)) {
             return -1;
         }
 
@@ -38,6 +41,29 @@ class Gameboard {
         }
 
         return board;
+    }
+
+    _shipPlaced(x0, x1, y0, y1) {
+        for(let i = 0 ; i < this._ships.length ; i++) {
+            let shipCoordinates = this._ships[i][0];
+            let x = false, y = false;
+            for(let n = x0 ; n <= x1 ; n++) {
+                if(n >= shipCoordinates[0] && n <= shipCoordinates[1]) {
+                    x = true;
+                }
+            }
+            for(let m = y0 ; m <= y1 ; m++) {
+                if(m >= shipCoordinates[2] && m <= shipCoordinates[3]) {
+                    y = true;
+                }
+            }
+
+            if(x && y) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     get size() {

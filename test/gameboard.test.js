@@ -9,4 +9,8 @@ test("Test Gameboard", () => {
     let shipData = board.placeShip(0, 0, 1, 2, 2);
 
     expect(board.ships[0]).toEqual(shipData);
+
+    let shipData1 = board.placeShip(0, 0, 1, 2, 2);
+
+    expect(shipData1).toEqual(-1);
 });
