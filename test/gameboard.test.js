@@ -13,4 +13,7 @@ test("Test Gameboard", () => {
     let shipData1 = board.placeShip(0, 0, 1, 2, 2);
 
     expect(shipData1).toEqual(-1);
+
+    expect(board.receiveAttack(0, 1)).toEqual("hit");
+    expect(board.receiveAttack(0, 0)).toEqual("missed");
 });

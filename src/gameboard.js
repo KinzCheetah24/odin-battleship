@@ -29,6 +29,23 @@ class Gameboard {
         return shipData;
     }
 
+    receiveAttack(x, y) {
+        let shipHit = this._hitShip(x, y);
+
+        if(shipHit === -2) {
+            return "missed";
+        }
+
+        if(shipHit >= 0 && !this._board[x][y]) {
+            this._ships[shipHit][1].hit();
+            this._board[x][y] = true;
+
+            return "hit";
+        }
+
+        return -1;
+    }
+
     _createBoard(size) {
         let board = [];
 
@@ -64,6 +81,22 @@ class Gameboard {
         }
 
         return false;
+    }
+
+    _hitShip(x, y) {
+        if(!(x < this._size && y < this._size)) {
+            return -1;
+        }
+
+        for(let i = 0 ; i < this._ships.length ; i++) {
+            let shipCoordinates = this._ships[i][0];
+            
+            if((x >= shipCoordinates[0] && x <= shipCoordinates[1]) && (y >= shipCoordinates[2] && y <= shipCoordinates[3])) {
+                return i;
+            }
+        }
+
+        return -2;
     }
 
     get size() {
