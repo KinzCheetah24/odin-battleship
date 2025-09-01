@@ -46,6 +46,18 @@ class Gameboard {
         return -1;
     }
 
+    shipsSunken() {
+        let sunken = true;
+
+        for(let i = 0 ; i < this._ships.length ; i++) {
+            if(!this._ships[i][1].isSunk()) {
+                sunken = false;
+            }
+        }
+
+        return sunken;
+    }
+
     _createBoard(size) {
         let board = [];
 

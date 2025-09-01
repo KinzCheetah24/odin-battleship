@@ -16,4 +16,10 @@ test("Test Gameboard", () => {
 
     expect(board.receiveAttack(0, 1)).toEqual("hit");
     expect(board.receiveAttack(0, 0)).toEqual("missed");
+
+    expect(board.shipsSunken()).toEqual(false);
+
+    board.receiveAttack(0, 2);
+
+    expect(board.shipsSunken()).toEqual(true);
 });
