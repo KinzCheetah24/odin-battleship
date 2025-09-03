@@ -5,6 +5,7 @@ class Gameboard {
     constructor(size) {
         this._size = size;
         this._board = this._createBoard(size);
+        this._shipsBoard = this._createBoard(size);
         this._ships = [];
     }
 
@@ -22,6 +23,12 @@ class Gameboard {
         let coordinates = [x0, x1, y0, y1];
         let ship = new Ship(shipLength);
 
+        for(let i = x0 ; i <= x1 ; i++) {
+            for(let j = y0 ; j <= y1 ; j++) {
+                this._shipsBoard[i][j] = "ship";
+            }
+        }
+
         let shipData = [coordinates, ship];
 
         this._ships.push(shipData);
@@ -31,6 +38,10 @@ class Gameboard {
 
     receiveAttack(x, y) {
         let shipHit = this._hitShip(x, y);
+
+        if(this._board[x][y] !== false) {
+            return -1;
+        }
 
         if(shipHit === -2) {
             this._board[x][y] = "missed";
@@ -118,6 +129,10 @@ class Gameboard {
 
     get board() {
         return this._board;
+    }
+
+    get shipsBoard() {
+        return this._shipsBoard;
     }
 
     get ships() {
