@@ -33,12 +33,13 @@ class Gameboard {
         let shipHit = this._hitShip(x, y);
 
         if(shipHit === -2) {
+            this._board[x][y] = "missed";
             return "missed";
         }
 
         if(shipHit >= 0 && !this._board[x][y]) {
             this._ships[shipHit][1].hit();
-            this._board[x][y] = true;
+            this._board[x][y] = "hit";
 
             return "hit";
         }
