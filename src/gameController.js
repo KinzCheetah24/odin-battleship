@@ -37,12 +37,34 @@ class GameController {
             this._turn.playerTurn = winner !== null ? "finished" : this._turn.playerTurn;
         }
 
-        console.log(winner);
-
         return {
             attackResult : attackResult,
             winner : winner
-            };
+        };
+    }
+
+    computerAttack() {
+        let coordinates = this._randomCoordinates();
+
+        while(this._realPlayer.gameboard.board[coordinates.x][coordinates.y] !== false) {
+            coordinates = this._randomCoordinates();
+        }
+
+        console.log(this._turn.playerTurn);
+
+        let attackResult = this.processAttack(coordinates.x, coordinates.y);
+        attackResult.coordinates = coordinates;
+
+        return attackResult;
+    }
+
+    _randomCoordinates() {
+        let number = Math.floor(Math.random() * this._size * this._size);
+
+        return {
+            x : Math.floor(number / this._size),
+            y : number % this._size
+        }
     }
 
     get realPlayer() {

@@ -29,7 +29,7 @@ class DomDisplay {
                 if(board[i][j] === "missed") {
                     square.style.backgroundColor = "lightblue";
                 }
-                if(shipsBoard[i][j] === "ship") {
+                if(shipsBoard[i][j] === "ship" && type === "real") {
                     square.style.backgroundColor = "blue";
                 }
 
@@ -53,26 +53,37 @@ class DomDisplay {
 
                     let result = gameController.processAttack(x, y);
 
-                    if (result.attackResult === "hit") {
-                        e.target.textContent = "x";
-                    } else if(result.attackResult === "missed") {
-                        e.target.style.backgroundColor = "lightblue";
-                    }
-
-                    if(gameController.turn.playerTurn === "real") {
-                        this._messageDisplay.textContent = "Real Player Turn";
-                    } else if(gameController.turn.playerTurn === "computer") {
-                        this._messageDisplay.textContent = "Computer Player Turn";
-                    } else if(gameController.turn.playerTurn === "finished") {
-                        this._messageDisplay.textContent = "Game Ended, " + (result.winner === "real" ? "Real" : result.winner === "computer" ? "Computer" : "None")+ " Player Wins";
-                    }
+                    this._displayAttackResultSquare(e.target, result, gameController.turn.playerTurn);
 
                 } else if(gameController.turn.playerTurn === "finished") {
                     console.log("Game finished");
                 } else {
                     console.log("Not your turn");
                 }
+
+                if(gameController.turn.playerTurn === "computer") {
+                    let result = gameController.computerAttack();
+                    let square = this._realPlayerBoardDisplay.children[result.coordinates.x * gameController.size + result.coordinates.y];
+
+                    this._displayAttackResultSquare(square, result, gameController.turn.playerTurn);
+                }
             });
+        }
+    }
+
+    _displayAttackResultSquare(square, result, turn) {
+        if (result.attackResult === "hit") {
+            square.textContent = "x";
+        } else if(result.attackResult === "missed") {
+            square.style.backgroundColor = "lightblue";
+        }
+
+        if(turn === "real") {
+            this._messageDisplay.textContent = "Real Player Turn";
+        } else if(turn === "computer") {
+            this._messageDisplay.textContent = "Computer Player Turn";
+        } else if(turn === "finished") {
+            this._messageDisplay.textContent = "Game Ended, " + (result.winner === "real" ? "Real" : result.winner === "computer" ? "Computer" : "None")+ " Player Wins";
         }
     }
 }
