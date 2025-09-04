@@ -2,7 +2,10 @@ const {RealPlayer, ComputerPlayer, Player} = require("./player");
 const DomDisplay = require("./domDisplay");
 
 class GameController {
+
     constructor(size) {
+        this.shipsForPlacement = [[1, 5], [1, 4], [2, 3], [4, 2]];
+
         this._realPlayer = new Player(size, new RealPlayer());
         this._computerPlayer = new Player(size, new ComputerPlayer());
 
@@ -12,14 +15,21 @@ class GameController {
     }
 
     init() {
-        this._realPlayer.defaultGame();
-        this._computerPlayer.defaultGame();
-
+        // Select default or custom
         this._domDisplay.displayPlayerBoard("real", this);
         this._domDisplay.displayPlayerBoard("computer", this);
 
-        this._domDisplay.squareEventListeners("real", this);
-        this._domDisplay.squareEventListeners("computer", this);
+        this._domDisplay.gameTypeDisplay(this);
+        // Start Game
+
+        // this._realPlayer.defaultGame();
+        // this._computerPlayer.defaultGame();
+
+        // this._domDisplay.displayPlayerBoard("real", this);
+        // this._domDisplay.displayPlayerBoard("computer", this);
+
+        // this._domDisplay.squareEventListeners("real", this);
+        // this._domDisplay.squareEventListeners("computer", this);
     }
 
     processAttack(x, y) {
@@ -50,12 +60,30 @@ class GameController {
             coordinates = this._randomCoordinates();
         }
 
-        console.log(this._turn.playerTurn);
-
         let attackResult = this.processAttack(coordinates.x, coordinates.y);
         attackResult.coordinates = coordinates;
 
         return attackResult;
+    }
+
+    allShipsPlaced(type) {
+        if(type === "real") {
+            return this._checkAllShips(this._realPlayer.gameboard.ships) === shipsForPlacement;
+        } else {
+            return this._checkAllShips(this._computerPlayer.gameboard.ships) === shipsForPlacement;
+        }
+    }
+
+    shipPlacementTurn(ships) {
+        let shipsPlaced = this._checkAllShips(ships);
+
+        for(let i = 0 ; i < shipsPlaced.length ; i++) {
+            if(this.shipsForPlacement[i][0] - shipsPlaced[i][0] > 0) {
+                return [this.shipsForPlacement[i][0] - shipsPlaced[i][0], this.shipsForPlacement[i][1]];
+            }
+        }
+
+        return -1;
     }
 
     _randomCoordinates() {
@@ -65,6 +93,26 @@ class GameController {
             x : Math.floor(number / this._size),
             y : number % this._size
         }
+    }
+
+    _shipPlacementArray() {
+        return [[0, 5], [0, 4], [0, 3], [0, 2]];
+    }
+
+    _checkAllShips(ships) {
+        let shipsArray = this._shipPlacementArray();
+
+        for(let i = 0 ; i < ships.length ; i++) {
+            let shipLength = ships[i][1].length;
+
+            shipsArray.forEach(element => {
+                if(element[1] === shipLength) {
+                    element[0]++;
+                }
+            });
+        }
+
+        return shipsArray;
     }
 
     get realPlayer() {

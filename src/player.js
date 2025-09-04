@@ -1,13 +1,13 @@
 const Gameboard = require("./gameboard");
 
 class RealPlayer {
-    constructor() {
+    placeShip() {
 
     }
 }
 
 class ComputerPlayer {
-    constructor() {
+    placeShip() {
         
     }
 }
@@ -27,6 +27,10 @@ class Player {
         this._board.placeShip(2, 3, 6, 6, 2);
         this._board.placeShip(6, 8, 6, 6, 3);
         this._board.placeShip(5, 9, 8, 8, 5);
+    }
+
+    resetBoard() {
+        this._board = new Gameboard(this._board.size);
     }
 
     get gameboard() {
