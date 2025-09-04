@@ -20,18 +20,7 @@ class GameController {
 
         this._domDisplay.gameTypeDisplay(this);
 
-        // Start Game
         this._domDisplay.startGame(this);
-    }
-
-    restartGame() {
-        this._realPlayer = new Player(size, new RealPlayer());
-        this._computerPlayer = new Player(size, new ComputerPlayer());
-
-        this._domDisplay = new DomDisplay();
-        this._turn = {playerTurn : "real"};
-        
-        this.init();
     }
 
     processAttack(x, y) {

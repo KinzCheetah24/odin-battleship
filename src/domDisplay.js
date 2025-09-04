@@ -8,6 +8,7 @@ class DomDisplay {
         this._customPlacement = document.querySelector(".placement");
         this._placeShipBtn = document.querySelector(".place-btn");
         this._startGameBtn = document.querySelector(".start-game-btn");
+        this._resetGameBtn = document.querySelector(".reset-game-btn");
     }
 
     displayPlayerBoard(type, gameController) {
@@ -130,6 +131,11 @@ class DomDisplay {
             this._messageDisplay.textContent = "Computer Player Turn";
         } else if(turn === "finished") {
             this._messageDisplay.textContent = "Game Ended, " + (result.winner === "real" ? "Real" : result.winner === "computer" ? "Computer" : "None")+ " Player Wins";
+            this._resetGameBtn.style.display = "block";
+
+            this._resetGameBtn.addEventListener("click", () => {
+                location.reload();
+            })
         }
     }
 
