@@ -15,21 +15,23 @@ class GameController {
     }
 
     init() {
-        // Select default or custom
         this._domDisplay.displayPlayerBoard("real", this);
         this._domDisplay.displayPlayerBoard("computer", this);
 
         this._domDisplay.gameTypeDisplay(this);
+
         // Start Game
+        this._domDisplay.startGame(this);
+    }
 
-        // this._realPlayer.defaultGame();
-        // this._computerPlayer.defaultGame();
+    restartGame() {
+        this._realPlayer = new Player(size, new RealPlayer());
+        this._computerPlayer = new Player(size, new ComputerPlayer());
 
-        // this._domDisplay.displayPlayerBoard("real", this);
-        // this._domDisplay.displayPlayerBoard("computer", this);
-
-        // this._domDisplay.squareEventListeners("real", this);
-        // this._domDisplay.squareEventListeners("computer", this);
+        this._domDisplay = new DomDisplay();
+        this._turn = {playerTurn : "real"};
+        
+        this.init();
     }
 
     processAttack(x, y) {
@@ -53,6 +55,27 @@ class GameController {
         };
     }
 
+    computerShipsPlacement() {
+        while(!this.allShipsPlaced("computer")) {
+            
+            let shipTurn = this.shipPlacementTurn(this._computerPlayer.gameboard.ships);
+
+            let direction = Math.floor(Math.random() * 2) === 0 ? "horizontal" : "vertical";
+
+            let result = -1;
+
+            while(result === -1) {
+                let coordinates = this._randomCoordinates();
+
+                if(direction === "horizontal") {
+                    result = this._computerPlayer.gameboard.placeShip(coordinates.x, coordinates.x, coordinates.y, coordinates.y + shipTurn[1] - 1, shipTurn[1]);
+                } else {
+                    result = this._computerPlayer.gameboard.placeShip(coordinates.x, coordinates.x + shipTurn[1] - 1, coordinates.y, coordinates.y, shipTurn[1]);
+                }
+            }
+        }
+    }
+
     computerAttack() {
         let coordinates = this._randomCoordinates();
 
@@ -68,9 +91,9 @@ class GameController {
 
     allShipsPlaced(type) {
         if(type === "real") {
-            return this._checkAllShips(this._realPlayer.gameboard.ships) === shipsForPlacement;
+            return JSON.stringify(this._checkAllShips(this._realPlayer.gameboard.ships)) === JSON.stringify(this.shipsForPlacement);
         } else {
-            return this._checkAllShips(this._computerPlayer.gameboard.ships) === shipsForPlacement;
+            return JSON.stringify(this._checkAllShips(this._computerPlayer.gameboard.ships)) === JSON.stringify(this.shipsForPlacement);
         }
     }
 

@@ -86,6 +86,24 @@ class DomDisplay {
         });
     }
 
+    startGame(gameController) {
+        this._startGameBtn.addEventListener("click", () => {
+            if(gameController.allShipsPlaced("real")) {
+                this._messageDisplay.textContent = "Real Player Turn";
+
+                this._gamePlacementMode.style.display = "none";
+                this._customPlacement.style.display = "none";
+                this._placeShipBtn.style.display = "none";
+                this._startGameBtn.style.display = "none";
+
+                gameController.computerShipsPlacement();
+
+                this.squareEventListeners("real", gameController);
+                this.squareEventListeners("computer", gameController);
+            }
+        });
+    }
+
     _removePlayerBoardDisplay(type) {
         let boardDisplay = null;
         if(type === "real") {
